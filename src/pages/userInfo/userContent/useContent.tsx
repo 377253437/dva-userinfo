@@ -54,7 +54,7 @@ const UserContent: React.FC<IUserContentProps> = () => {
       <Form.Item
         label="地址"
         name="address"
-        rules={[{ required: true, message: 'Please input your username!' }]}
+        // rules={[{ required: true, message: 'Please input your username!' }]}
         validateTrigger="onBlur"
         hideErrorWhenChange
       >
