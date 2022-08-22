@@ -1,21 +1,15 @@
 import * as React from 'react';
-import styles from './index.less';
-import { Input, Form, Select, Radio, InputNumber } from 'sensd';
-interface IUserContentProps {
-  // onChange: any;
-  // value: any;
-}
+// import styles from './index.less';
+import { Input, Form, Radio, InputNumber } from 'sensd';
 
-const UserContent: React.FC<IUserContentProps> = () => {
-  // const handleOnchange = (value) => {
-  //   onChange(value)
-  // }
+
+const DefaultContent: React.FC = () => {
   return (
     <>
       <Form.Item
         label="用户名"
         name="username"
-        // rules={[{ required: true, message: 'Please input your username!', whitespace: true }]}
+        rules={[{ required: true, message: '请输入用户名', whitespace: true }]}
         validateTrigger="onBlur"
         hideErrorWhenChange
       >
@@ -24,7 +18,7 @@ const UserContent: React.FC<IUserContentProps> = () => {
       <Form.Item
         label="年龄"
         name="age"
-        // rules={[{ required: true, message: 'Please input your username!' }]}
+        rules={[{ required: true, message: '请输入年龄' }]}
         validateTrigger="onBlur"
         hideErrorWhenChange
       >
@@ -33,7 +27,7 @@ const UserContent: React.FC<IUserContentProps> = () => {
       <Form.Item
         label="性别"
         name="sex"
-        // rules={[{ required: true, message: 'Please input your username!' }]}
+        rules={[{ required: true, message: '请选择性别' }]}
         validateTrigger="onBlur"
         hideErrorWhenChange
       >
@@ -45,7 +39,7 @@ const UserContent: React.FC<IUserContentProps> = () => {
       <Form.Item
         label="邮箱"
         name="email"
-        // rules={[{ required: true, message: 'Please input your username!' }]}
+        rules={[{ required: true, message: '请输入邮箱' }]}
         validateTrigger="onBlur"
         hideErrorWhenChange
       >
@@ -54,7 +48,7 @@ const UserContent: React.FC<IUserContentProps> = () => {
       <Form.Item
         label="地址"
         name="address"
-        // rules={[{ required: true, message: 'Please input your username!' }]}
+        rules={[{ required: true, message: '请输入地址' }]}
         validateTrigger="onBlur"
         hideErrorWhenChange
       >
@@ -64,4 +58,4 @@ const UserContent: React.FC<IUserContentProps> = () => {
   );
 };
 
-export default UserContent;
+export default DefaultContent;

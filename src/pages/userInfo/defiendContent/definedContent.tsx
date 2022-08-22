@@ -1,31 +1,57 @@
 import * as React from 'react';
-import { Input, Form, Select, Radio, InputNumber } from 'sensd';
-interface IDefinedContentProps {}
+import { Input, Form, Radio, Button, Popconfirm } from 'sensd';
+import { CloseOutlined } from '@sensd/icons';
+import { DefinedValue } from '../userWrap/userWrap';
 
-const inputarr = [
-  {
-    id: '1212313',
-    type: 1,
-    name: '阿斯顿撒旦',
-    label: '阿斯顿撒旦',
-    initValue: 'aaaaaaa',
-  },
-];
+interface IDefinedContent {
+  inputArr: DefinedValue[];
+  setInputArr: React.Dispatch<React.SetStateAction<DefinedValue[]>>;
+}
 
-const DefinedContent: React.FC<IDefinedContentProps> = (props) => {
+const DefinedContent: React.FC<IDefinedContent> = ({ inputArr, setInputArr }) => {
+  const confirmDelete = (id:number) => {
+    const newData = inputArr.filter((item) => item.id !== id);
+    setInputArr(newData);
+  };
+
   return (
     <div>
-      {inputarr.map((item) => {
-        if (item.type === 1) {
+      {inputArr.map((item) => {
+        if (item.type === 'input') {
           return (
-            <Form.Item key={item.id} label={item.label} name={item.name} initialValue={item.initValue}>
-              <Input></Input>
-            </Form.Item>
+            <div style={{ display: 'flex' }}>
+              <Form.Item
+                key={item.id}
+                label={item.label}
+                name={item.name}
+                initialValue={item.initValue}
+                rules={[{ required: true, message: `请输入${item.name}` }]}
+              >
+                <Input></Input>
+              </Form.Item>
+              <Popconfirm title="确认删除？" onConfirm={() => confirmDelete(item.id)}>
+                <Button icon={<CloseOutlined />} style={{ marginLeft: '8px' }}></Button>
+              </Popconfirm>
+            </div>
           );
-        } else if (item.type === 2) {
+        } else if (item.type === 'select') {
           return (
-            <Form.Item key={item.id} label={item.label} name={item.name} initialValue={item.initValue}>
-              <Input></Input>
+            <Form.Item
+              key={item.id}
+              label={item.label}
+              name={item.name}
+              initialValue={item.initValue}
+              rules={[{ required: true, message: `请选择一项${item.name}` }]}
+            >
+              {/* name和label不变，Radio的个数和值，根据value来渲染 */}
+              <Radio.Group>
+                {Array.isArray(item.initValue) &&
+                  item.initValue.map((item, index) => (
+                    <Radio value={item} key={index}>
+                      {item}
+                    </Radio>
+                  ))}
+              </Radio.Group>
             </Form.Item>
           );
         }

@@ -1,15 +1,14 @@
+/* eslint-disable no-undef */
 /* eslint-disable react/jsx-no-undef */
 import * as React from 'react';
 import { useState } from 'react';
-import { Modal, Steps, Button, message, Input, Select, SelectTransfer } from 'sensd';
+import { Modal, Steps, Button, Input, Select, Form } from 'sensd';
 import { TemplateTextOutlined, TemplateCustomOutlined } from '@sensd/icons';
 import styles from './definedModal.less';
+import { DefinedValue } from '../userWrap/userWrap';
+
 const { Step } = Steps;
 const { Option } = Select;
-
-// 点击选中某个触达方式, 更新当前选中值
-// 默认选中第一个可用的通道
-//传入名称返回一个选项框
 
 interface ITodoModalProps {
   handleOk: () => void;
@@ -18,6 +17,8 @@ interface ITodoModalProps {
   changeDefined: number;
   handleInputClick: () => void;
   handleSelectClick: () => void;
+  inputArr:DefinedValue[]
+  setInputArr:React.Dispatch<React.SetStateAction<DefinedValue[]>>
 }
 
 const DefinedModal: React.FC<ITodoModalProps> = ({
@@ -27,24 +28,41 @@ const DefinedModal: React.FC<ITodoModalProps> = ({
   changeDefined,
   handleInputClick,
   handleSelectClick,
+  inputArr,
+  setInputArr
 }) => {
-  const [current, setCurrent] = useState(0);
+  const [inputForm] = Form.useForm();
 
-  const [open, setOpen] = useState(false);
+  const [inputValue, setInputValue] = useState<any>(null);
 
-  const [inputCount, setInputCount] = useState(0);
+  const [current, setCurrent] = useState<number>(0);
 
-  const inputCountFun = (count) => {
-    return Array.from({ length: count }, (_, index) => <Input size='small' key={index} style={{width:'45%',marginRight: '12px',marginTop:'12px' }}/>);
+  const [open, setOpen] = useState<boolean>(false);
+
+  const [inputCount, setInputCount] = useState<number>(0);
+
+  const onFinish = (value) => {
+    console.log('value', value);
   };
 
-  const handleChange = (value, option) => {
+  // const getValue = () => {
+  //   const value = inputForm.getFieldsValue();
+  //   setInputValue(value)
+  //   console.log('GETVALUE', value);
+  // };
+  const inputCountFun = (count: number) => {
+    return Array.from({ length: count }, (_, index) => (
+      <Input size="small" key={index} style={{ width: '45%', marginRight: '12px', marginTop: '12px' }} />
+    ));
+  };
+
+  const handleChange = (value: number, option: any) => {
     console.log(`selected ${value}`, option);
     setInputCount(value);
   };
   const steps = [
     {
-      title: 'First',
+      title: '第一步',
       content: (
         <div className={styles.titleBox}>
           <div
@@ -65,33 +83,45 @@ const DefinedModal: React.FC<ITodoModalProps> = ({
       ),
     },
     {
-      title: 'Second',
+      title: '第二步',
       content:
         changeDefined === 1 ? (
-          <div >
-            <span>请输入自定义属性名：</span>
-            <Input></Input>
-            <span>请输入自定义属性值：</span>
-            <Input></Input>
+          <div>
+            <Form form={inputForm} name="basic" onFinish={onFinish}>
+              <span>请输入自定义属性名：</span>
+              <Form.Item name="definedName">
+                <Input></Input>
+              </Form.Item>
+              <span>请输入自定义属性值：</span>
+              <Form.Item name="definedProp">
+                <Input></Input>
+              </Form.Item>
+            </Form>
           </div>
         ) : (
           <div className={styles.definedSelectBox}>
-            <div style={{display:'flex',marginTop:'10px'}}>
-            <span>请输入自定义属性名：</span>
-            <Input style={{width:'50%',marginBottom:'10px'}} size='small'></Input>
+            <div style={{ display: 'flex', marginTop: '10px' }}>
+              <span>请输入自定义属性名：</span>
+              <Input style={{ width: '50%', marginBottom: '10px' }} size="small"></Input>
             </div>
             <div>
-            <span>选项值的个数(最多6个)：</span>
-            <Select size='small' placeholder="请选择" onChange={handleChange} open={open} onDropdownVisibleChange={setOpen}>
-              <Option value={1}>1</Option>
-              <Option value={2}>2</Option>
-              <Option value={3}>3</Option>
-              <Option value={4}>4</Option>
-              <Option value={5}>5</Option>
-              <Option value={6}>6</Option>
-            </Select>
+              <span>选项值的个数(最多6个)：</span>
+              <Select
+                size="small"
+                placeholder="请选择"
+                onChange={handleChange}
+                open={open}
+                onDropdownVisibleChange={setOpen}
+              >
+                <Option value={1}>1</Option>
+                <Option value={2}>2</Option>
+                <Option value={3}>3</Option>
+                <Option value={4}>4</Option>
+                <Option value={5}>5</Option>
+                <Option value={6}>6</Option>
+              </Select>
             </div>
-            <div style={{display:'flex',flexWrap:'wrap'}}>{inputCountFun(inputCount)}</div>
+            <div style={{ display: 'flex', flexWrap: 'wrap' }}>{inputCountFun(inputCount)}</div>
           </div>
         ),
     },
@@ -107,6 +137,18 @@ const DefinedModal: React.FC<ITodoModalProps> = ({
 
   const handleModalOk = () => {
     handleOk();
+    const {definedName,definedProp} = inputForm.getFieldsValue();
+    const tmp = {
+      id:new Date().getTime(),
+      type: changeDefined === 1?'input':'select',
+      name:definedName,
+      label:definedName,
+      initValue:definedProp
+    }
+    const newData = [...inputArr,tmp]
+    console.log(newData)
+    setInputArr(newData)
+    setCurrent(0)
   };
 
   const handleModalCancel = () => {
@@ -132,11 +174,6 @@ const DefinedModal: React.FC<ITodoModalProps> = ({
           {current < steps.length - 1 && (
             <Button type="primary" onClick={() => next()}>
               下一步
-            </Button>
-          )}
-          {current === steps.length - 1 && (
-            <Button type="primary" onClick={() => message.success('Processing complete!')}>
-              完成
             </Button>
           )}
           {current > 0 && (
