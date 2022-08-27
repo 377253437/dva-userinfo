@@ -10,4 +10,3 @@ const app = dva({
 app.router(require('./router.jsx').default);
 
 app.start('#root');
-

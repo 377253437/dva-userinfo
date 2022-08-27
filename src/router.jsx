@@ -6,14 +6,16 @@ import * as React from 'react';
 
 import { Router, Switch, Route } from 'dva/router';
 
-import UserInfo from './pages/userInfo/index';
+// import UserInfo from './pages/userInfo/index';
+
+import DeepSelect from './pages/multiSelect'
 
 export default function RouterConfig({ history }) {
   // 路由配置
   return (
     <Router history={history}>
       <Switch>
-        <Route path="/" component={UserInfo}></Route>
+        <Route path="/" component={DeepSelect}></Route>
       </Switch>
     </Router>
   );

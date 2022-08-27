@@ -7,9 +7,8 @@ interface IDefinedContent {
   inputArr: DefinedValue[];
   setInputArr: React.Dispatch<React.SetStateAction<DefinedValue[]>>;
 }
-
 const DefinedContent: React.FC<IDefinedContent> = ({ inputArr, setInputArr }) => {
-  const confirmDelete = (id:number) => {
+  const confirmDelete = (id: number) => {
     const newData = inputArr.filter((item) => item.id !== id);
     setInputArr(newData);
   };
@@ -38,12 +37,11 @@ const DefinedContent: React.FC<IDefinedContent> = ({ inputArr, setInputArr }) =>
           return (
             <Form.Item
               key={item.id}
-              label={item.label}
               name={item.name}
-              initialValue={item.initValue}
+              label={item.label}
+              // initialValue={item.initValue}
               rules={[{ required: true, message: `请选择一项${item.name}` }]}
             >
-              {/* name和label不变，Radio的个数和值，根据value来渲染 */}
               <Radio.Group>
                 {Array.isArray(item.initValue) &&
                   item.initValue.map((item, index) => (
