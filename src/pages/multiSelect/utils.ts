@@ -106,4 +106,12 @@ const getData = () => {
 
 const initData: IData[] = getData();
 
-export { getMultiData, testData, GetRandomNum, initData };
+const getAsyncMultiData = () => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(initData);
+    }, 200);
+  });
+};
+
+export { getMultiData, testData, GetRandomNum, initData, getAsyncMultiData };

@@ -56,6 +56,7 @@ const TestData: React.FC<ITestData> = ({ multiData }) => {
     // setTableData(selectedOptions)，不展示选择的内容，只展示外层搜索的内容
     setSelectedValue(value);
     if (value) {
+      // 如果在这里存的话，其他地方用到 selectedValue 的时候，可能又需要存一次， 所以最好放在 effect 中去存，根据依赖项，每次它改变都会存储，无论这个值在哪儿使用
       sessionStorage.setItem('selectedValue', JSON.stringify(value));
     }
   }

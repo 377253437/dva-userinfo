@@ -1,11 +1,15 @@
 import * as React from 'react';
-import { initData, IData } from './utils';
+import { IData, getAsyncMultiData } from './utils';
 import TestData from './TestData';
 
-const initialData: IData[] = initData;
-
 const SelectWrap: React.FC = () => {
-  const [multiData, _] = React.useState<IData[]>(initialData);
+  const [multiData, setMultiData] = React.useState<IData[]>([]);
+  React.useEffect(() => {
+    getAsyncMultiData()
+      .then((value: IData[]) => setMultiData(value))
+      .catch((error) => console.log(error));
+  }, []);
+
   return (
     <div>
       <TestData multiData={multiData}></TestData>
