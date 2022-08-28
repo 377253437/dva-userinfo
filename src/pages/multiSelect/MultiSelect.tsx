@@ -142,11 +142,12 @@ const MultiSelect: React.FC<ITestData> = ({ multiData }) => {
       <div className={styles.tableBox}>
         <h1 style={{ fontSize: '19px' }}>搜索结果展示:</h1>
         <Table
+          style={{ transition: 'all 1s' }}
           columns={columns}
           dataSource={tableData}
           className={styles.table}
           childrenColumnName="items"
-          indentSize={5}
+          indentSize={15}
           rowKey="id"
         ></Table>
       </div>
