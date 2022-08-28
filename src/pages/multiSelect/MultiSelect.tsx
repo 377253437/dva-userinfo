@@ -1,3 +1,7 @@
+/**
+ * @file 数据的展示
+ * @author  lizhengtai@sensordata.cn
+ */
 import * as React from 'react';
 import { Cascader, Input, message } from 'sensd';
 import { DefaultOptionType } from 'sensd/lib/cascader';
@@ -36,18 +40,18 @@ interface ITestData {
   multiData: IData[];
 }
 
-const TestData: React.FC<ITestData> = ({ multiData }) => {
-  const [tableData, setTableData] = React.useState<DefaultOptionType[]>([]);
-
+const MultiSelect: React.FC<ITestData> = ({ multiData }) => {
+  // 下拉菜单的所有数据
   const [optionData, setOptionData] = React.useState<any>(() => {
     return sessionStorage.getItem('optionData') ? JSON.parse(sessionStorage.getItem('optionData') || '0') : [];
   });
-
-  // 每次刷新页面后，数据都会重新随机生成，就算我拿到了我选择时的数据，但是无法与新刷新的数据进行匹配，已解决：先保存 optionData
+  // 搜索结果的数据
+  const [tableData, setTableData] = React.useState<DefaultOptionType[]>([]);
+  // 下拉菜单选中的数据
   const [selectedValue, setSelectedValue] = React.useState<string[]>(() => {
     return sessionStorage.getItem('selectedValue') ? JSON.parse(sessionStorage.getItem('selectedValue') || '0') : [];
   });
-
+  //  搜索框的 values
   const [searchValue, setSearchValue] = React.useState<string>('');
 
   // 此处onChange 返回的是 value，是 cname 相应的字段
@@ -66,11 +70,11 @@ const TestData: React.FC<ITestData> = ({ multiData }) => {
   };
   // 此处用 searchValue 去改变 selectedValue 的值就能改变下拉菜单选中的值了，因为它是受控，受 selectedValue 的控制
   const onSearch = (searchValue: string) => {
-    function onRecursionData(arr, val) {
+    function getSearchedArr(arr, val) {
       let newArr: any = [];
       arr.forEach((item) => {
         if (item.items && item.items.length) {
-          let items = onRecursionData(item.items, val);
+          let items = getSearchedArr(item.items, val);
           let obj: any = {
             ...item,
             items,
@@ -86,7 +90,7 @@ const TestData: React.FC<ITestData> = ({ multiData }) => {
       });
       return newArr;
     }
-    let result = onRecursionData(optionData, searchValue).flat(Infinity);
+    let result = getSearchedArr(optionData, searchValue);
     if (result.length) {
       setTableData(result);
       message.success('下拉菜单搜索结果在下方表格中显示', 1);
@@ -133,7 +137,6 @@ const TestData: React.FC<ITestData> = ({ multiData }) => {
           placeholder="Please select"
           showSearch={{ filter }}
           expandTrigger="hover"
-          // onSearch={(value) => console.log(value)}
         />
       </div>
       <div className={styles.tableBox}>
@@ -151,4 +154,4 @@ const TestData: React.FC<ITestData> = ({ multiData }) => {
   );
 };
 
-export default TestData;
+export default MultiSelect;

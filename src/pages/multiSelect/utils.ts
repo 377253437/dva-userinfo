@@ -1,3 +1,7 @@
+/**
+ * @file 数据的模拟
+ * @author  lizhengtai@sensordata.cn
+ */
 import { uniqueId, cloneDeep } from 'lodash';
 
 export interface IData {
@@ -45,16 +49,6 @@ const GetRandomNum = (Min, Max) => {
   let Rand = Math.random();
   return Min + Math.round(Rand * Range);
 };
-// 随机生成1到10个单层数组对象
-// 处理字段名字加上 count 方法一， 使用 Cascader 时在数据中去处理
-// const getRandomObj = (count) => {
-//   const randomStr = () => Math.floor(Math.random() * 100000000).toString(32);
-//   return Array.from({ length: count }, (_, index) => ({
-//     cname: `${randomStr()} - ${index}`,
-//     field: `${randomStr()} - ${index}`,
-//     count: index,
-//   }));
-// };
 
 // 处理字段名字加上 count 方法二， 在前端去处理数据的渲染， 元数据不变
 const getRandomObj = (count) => {
@@ -67,7 +61,7 @@ const getRandomObj = (count) => {
   }));
 };
 
-const getArr = (arr, level) => {
+const getArr = (arr, level: number) => {
   if (!level) return arr;
   let randomNumber = GetRandomNum(5, 10);
   let randomCount = GetRandomNum(0, randomNumber - 1);
@@ -77,30 +71,23 @@ const getArr = (arr, level) => {
   randomArrObj[randomCount].items = [];
   // 收集每一次的数组对象
   arr.push(...randomArrObj);
-  // result.push(...randomArrObj);
   // 将随机数组对象中的 item 放入递归
   return getArr(arr[randomCount].items, level - 1);
 };
 
-const getMultiData = (deep) => {
+const getMultiData = (deep: number) => {
+  if (deep < 1 || deep > 23) {
+    return [];
+  }
   let result = [];
   getArr(result, deep);
   return result;
 };
 
 const getData = () => {
-  function handleCnameAddCount(source, level) {
-    source.forEach((item) => {
-      item.cname = `${item.cname} - ${level} - ${item.count}`;
-      if (item.items) {
-        handleCnameAddCount(item.items, level + 1);
-      }
-    });
-  }
   const RandomCount = GetRandomNum(5, 15);
   const Data = getMultiData(RandomCount);
   const testData = cloneDeep(Data);
-  handleCnameAddCount(testData, 0);
   return testData;
 };
 
