@@ -4,7 +4,7 @@
  */
 
 import * as React from 'react';
-import { IData, getAsyncMultiData } from './utils';
+import { IData, initData, getAsyncMultiData } from './utils';
 import MultiSelect from './MultiSelect';
 import { cloneDeep } from 'lodash';
 
@@ -22,17 +22,21 @@ const getData = (data) => {
   handleCnameAddCount(testData, 0);
   return testData;
 };
+let resultData: any = getData(initData);
 
 const SelectWrap: React.FC = () => {
-  const [multiData, setMultiData] = React.useState<IData[]>([]);
+  const [multiData, setMultiData] = React.useState<IData[]>(resultData);
   React.useEffect(() => {
-    getAsyncMultiData()
-      .then((value: IData[]) => {
-        let result = getData(value);
-        setMultiData(result);
-      })
-      .catch((error) => console.log(error));
-  }, []);
+    const getResult = () => {
+      getAsyncMultiData()
+        .then((value: IData[]) => {
+          let result = getData(value);
+          setMultiData(result);
+        })
+        .catch((error) => console.log(error));
+    };
+    getResult();
+  });
 
   return (
     <div>

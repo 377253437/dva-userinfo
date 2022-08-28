@@ -41,15 +41,23 @@ interface ITestData {
 }
 
 const MultiSelect: React.FC<ITestData> = ({ multiData }) => {
+  React.useEffect(() => {
+    if (!optionData.length) {
+      localStorage.setItem('optionData', JSON.stringify(multiData));
+      setOptionData(JSON.parse(localStorage.getItem('optionData') || '0'));
+    } else {
+      localStorage.setItem('optionData', JSON.stringify(optionData));
+    }
+  }, []);
   // 下拉菜单的所有数据
   const [optionData, setOptionData] = React.useState<any>(() => {
-    return sessionStorage.getItem('optionData') ? JSON.parse(sessionStorage.getItem('optionData') || '0') : [];
+    return localStorage.getItem('optionData') ? JSON.parse(localStorage.getItem('optionData') || '0') : [];
   });
   // 搜索结果的数据
   const [tableData, setTableData] = React.useState<DefaultOptionType[]>([]);
   // 下拉菜单选中的数据
   const [selectedValue, setSelectedValue] = React.useState<string[]>(() => {
-    return sessionStorage.getItem('selectedValue') ? JSON.parse(sessionStorage.getItem('selectedValue') || '0') : [];
+    return localStorage.getItem('selectedValue') ? JSON.parse(localStorage.getItem('selectedValue') || '0') : [];
   });
   //  搜索框的 values
   const [searchValue, setSearchValue] = React.useState<string>('');
@@ -61,7 +69,7 @@ const MultiSelect: React.FC<ITestData> = ({ multiData }) => {
     setSelectedValue(value);
     if (value) {
       // 如果在这里存的话，其他地方用到 selectedValue 的时候，可能又需要存一次， 所以最好放在 effect 中去存，根据依赖项，每次它改变都会存储，无论这个值在哪儿使用
-      sessionStorage.setItem('selectedValue', JSON.stringify(value));
+      localStorage.setItem('selectedValue', JSON.stringify(value));
     }
   }
 
@@ -102,14 +110,7 @@ const MultiSelect: React.FC<ITestData> = ({ multiData }) => {
   };
 
   // 对数据的存储，防止每次渲染都生成重新的一批随机的值
-  React.useEffect(() => {
-    if (!optionData.length) {
-      sessionStorage.setItem('optionData', JSON.stringify(multiData));
-      setOptionData(JSON.parse(sessionStorage.getItem('optionData') || '0'));
-    } else {
-      sessionStorage.setItem('optionData', JSON.stringify(optionData));
-    }
-  }, []);
+
   return (
     <>
       <div className={styles.searchWrap}>
