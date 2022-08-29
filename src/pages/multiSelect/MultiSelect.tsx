@@ -99,14 +99,16 @@ const MultiSelect: React.FC<ITestData> = ({ multiData }) => {
       return newArr;
     }
     let result = getSearchedArr(optionData, searchValue);
+
     if (result.length) {
       setTableData(result);
-      message.success('下拉菜单搜索结果在下方表格中显示', 1);
     } else {
       message.error('很抱歉，下拉菜单没有搜索的结果', 1);
     }
-    console.log(result);
-    setSearchValue('');
+    if (!searchValue) {
+      setTableData([]);
+      message.warn('搜索结果已经清空', 1);
+    }
   };
 
   // 对数据的存储，防止每次渲染都生成重新的一批随机的值

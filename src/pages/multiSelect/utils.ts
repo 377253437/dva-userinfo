@@ -50,7 +50,6 @@ const GetRandomNum = (Min, Max) => {
   return Min + Math.round(Rand * Range);
 };
 
-// 处理字段名字加上 count 方法二， 在前端去处理数据的渲染， 元数据不变
 const getRandomObj = (count) => {
   const randomStr = () => Math.floor(Math.random() * 100000000).toString(32);
   return Array.from({ length: count }, (_, index) => ({
@@ -58,6 +57,7 @@ const getRandomObj = (count) => {
     cname: randomStr(),
     field: randomStr(),
     count: index,
+    items: [],
   }));
 };
 
