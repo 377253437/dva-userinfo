@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Steps, Button, Form, Radio, RadioChangeEvent, Tag, Select } from 'sensd';
+import { Steps, Button, Form, Radio, RadioChangeEvent, Tag, Select, Input } from 'sensd';
 import styles from './index.less';
 import { uniqueId } from 'lodash';
 import { TemplateCustomOutlined, TimeControllerOutlined } from '@sensd/icons';
@@ -14,7 +14,6 @@ const StepContent: React.FC<IStepContentProps> = () => {
 
   // selectedValue 的值 需要根据 radioValue 的状态来变化  现在的 Bug 是 选择了第一步到了第二步 再返回第一步重新选择时， 第二步没有变化
   const [selectedValue, setSelectedValue] = React.useState<string>('');
-
 
   const getDescription = (step: string) => {
     switch (step) {
@@ -63,6 +62,32 @@ const StepContent: React.FC<IStepContentProps> = () => {
     console.log(value);
     setSelectedValue(value);
   };
+  const validateInputNumber = (_, value) => {
+    console.log('value', value);
+    console.log('value', typeof value);
+
+    let reg = /^[1-9]+[0-9]*]*$/; //判断字符串是否为数字 ，判断正整数用/^[1-9]+[0-9]*]*$/
+    if (reg.test(value)) {
+      if (value > 10) {
+        return Promise.resolve();
+      } else {
+        return Promise.reject(new Error('输入的数字必须大于 10'));
+      }
+    } else {
+      return Promise.reject(new Error('输入必须为数字'));
+    }
+
+    //     // 1.校验必须为数字  2. 校验数字必须大于 10
+    //     if (typeof value === 'number') {
+    //       if (value > 10) {
+    //         return Promise.resolve();
+    //       } else {
+    //         return Promise.reject(new Error('输入的数字必须大于 10'));
+    //       }
+    //     } else {
+    //       return Promise.reject(new Error('输入必须为数字'));
+    //     }
+  };
   const steps = [
     {
       id: uniqueId(),
@@ -93,11 +118,17 @@ const StepContent: React.FC<IStepContentProps> = () => {
       title: '步骤 2',
       content: (
         <Form>
-          <Form.Item name="selectDropdown">
+          <Form.Item name="selectDropdown" rules={[{ required: true }, { message: '请选择一项' }]}>
             {radioValue === 1 && (
               <div>
                 <span className={styles['select-label']}>请进一步选择：</span>
-                <Select style={{width:'150px'}} size="large" placeholder="请选择" value={selectedValue} onChange={handleSelectChange}>
+                <Select
+                  style={{ width: '150px' }}
+                  size="large"
+                  placeholder="请选择"
+                  value={selectedValue}
+                  onChange={handleSelectChange}
+                >
                   <Select.Option value="定时单次">定时单次</Select.Option>
                   <Select.Option value="定时重复">定时重复</Select.Option>
                 </Select>
@@ -106,7 +137,13 @@ const StepContent: React.FC<IStepContentProps> = () => {
             {radioValue === 2 && (
               <div>
                 <span className={styles['select-label']}>请进一步选择：</span>
-                <Select style={{width:'150px'}} size="large" placeholder="请选择" value={selectedValue} onChange={handleSelectChange}>
+                <Select
+                  style={{ width: '150px' }}
+                  size="large"
+                  placeholder="请选择"
+                  value={selectedValue}
+                  onChange={handleSelectChange}
+                >
                   <Select.Option value="完成触发">完成触发</Select.Option>
                   <Select.Option value="未完成触发">未完成触发</Select.Option>
                 </Select>
@@ -119,7 +156,16 @@ const StepContent: React.FC<IStepContentProps> = () => {
     {
       id: uniqueId(),
       title: '步骤 3',
-      content: 'Last-content',
+      content: (
+        <Form name="inputNumber" style={{ height: '50px' }}>
+          <Form.Item
+            name="inputNumber"
+            rules={[{ required: true, message: '请输入' }, { validator: validateInputNumber }]}
+          >
+            <Input size="large" placeholder="请输入数字" />
+          </Form.Item>
+        </Form>
+      ),
     },
   ];
 
