@@ -8,14 +8,16 @@ import { Router, Switch, Route } from 'dva/router';
 
 // import UserInfo from './pages/userInfo/index';
 
-import DeepSelect from './pages/multiSelect'
+// import DeepSelect from './pages/multiSelect'
+
+import Step from './pages/Step'
 
 export default function RouterConfig({ history }) {
   // 路由配置
   return (
     <Router history={history}>
       <Switch>
-        <Route path="/" component={DeepSelect}></Route>
+        <Route path="/" component={Step}></Route>
       </Switch>
     </Router>
   );
