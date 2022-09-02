@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { Steps, Button, Form, Radio, RadioChangeEvent, Tag, Select, Input } from 'sensd';
+import { Steps, Button, Form, Radio, RadioChangeEvent, Tag, Select, Input, InputNumber } from 'sensd';
 import styles from './index.less';
 import { uniqueId } from 'lodash';
 import { TemplateCustomOutlined, TimeControllerOutlined } from '@sensd/icons';
+import { ChangeEvent } from 'react';
 
 const { Step } = Steps;
 
@@ -14,6 +15,7 @@ const StepContent: React.FC<IStepContentProps> = () => {
 
   // selectedValue 的值 需要根据 radioValue 的状态来变化  现在的 Bug 是 选择了第一步到了第二步 再返回第一步重新选择时， 第二步没有变化
   const [selectedValue, setSelectedValue] = React.useState<string>('');
+  const [InputNumber, setInputNumber] = React.useState<string>('');
 
   const getDescription = (step: string) => {
     switch (step) {
@@ -39,19 +41,19 @@ const StepContent: React.FC<IStepContentProps> = () => {
           </>
         );
       }
+      // 校验通过，才显示数字
+      case '步骤 3': {
+        return (
+          <>
+            <p style={{ paddingTop: '5px' }}>
+              <Tag color="orchidPurple">{InputNumber}</Tag>
+            </p>
+          </>
+        );
+      }
       default:
         break;
     }
-
-    // if (step === '步骤 1') {
-    //   return (
-    //     <>
-    //       <p style={{ paddingTop: '5px' }}>
-    //         {radioValue === 1 ? <Tag color="steppeYellow">定时</Tag> : <Tag color="auroraGreen">触发</Tag>}
-    //       </p>
-    //     </>
-    //   );
-    // }
   };
   const handleRadioButtonChange = (e: RadioChangeEvent) => {
     console.log(e.target.value);
@@ -62,31 +64,26 @@ const StepContent: React.FC<IStepContentProps> = () => {
     console.log(value);
     setSelectedValue(value);
   };
+
   const validateInputNumber = (_, value) => {
     console.log('value', value);
     console.log('value', typeof value);
-
     let reg = /^[1-9]+[0-9]*]*$/; //判断字符串是否为数字 ，判断正整数用/^[1-9]+[0-9]*]*$/
-    if (reg.test(value)) {
-      if (value > 10) {
-        return Promise.resolve();
+    if (value) {
+      if (reg.test(value)) {
+        if (value > 10) {
+          setInputNumber(value);
+          return Promise.resolve();
+        } else {
+          return Promise.reject(new Error('输入的数字必须大于 10'));
+        }
       } else {
-        return Promise.reject(new Error('输入的数字必须大于 10'));
+        return Promise.reject(new Error('输入必须为数字'));
       }
-    } else {
-      return Promise.reject(new Error('输入必须为数字'));
+    }else{
+        setInputNumber('');
+        return Promise.reject(new Error('请输入'));
     }
-
-    //     // 1.校验必须为数字  2. 校验数字必须大于 10
-    //     if (typeof value === 'number') {
-    //       if (value > 10) {
-    //         return Promise.resolve();
-    //       } else {
-    //         return Promise.reject(new Error('输入的数字必须大于 10'));
-    //       }
-    //     } else {
-    //       return Promise.reject(new Error('输入必须为数字'));
-    //     }
   };
   const steps = [
     {
@@ -160,7 +157,7 @@ const StepContent: React.FC<IStepContentProps> = () => {
         <Form name="inputNumber" style={{ height: '50px' }}>
           <Form.Item
             name="inputNumber"
-            rules={[{ required: true, message: '请输入' }, { validator: validateInputNumber }]}
+            rules={[{ validator: validateInputNumber }]}
           >
             <Input size="large" placeholder="请输入数字" />
           </Form.Item>
