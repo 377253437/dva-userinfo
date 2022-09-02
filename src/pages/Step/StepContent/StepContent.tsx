@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Steps, Button, Form, Radio, RadioChangeEvent ,Tag} from 'sensd';
+import { Steps, Button, Form, Radio, RadioChangeEvent, Tag, Select } from 'sensd';
 import styles from './index.less';
 import { uniqueId } from 'lodash';
 import { TemplateCustomOutlined, TimeControllerOutlined } from '@sensd/icons';
@@ -8,22 +8,60 @@ const { Step } = Steps;
 
 interface IStepContentProps {}
 
-const StepContent: React.FC<IStepContentProps> = (props) => {
+const StepContent: React.FC<IStepContentProps> = () => {
   const [radioValue, setRadioValue] = React.useState<number>(1);
   const [current, setCurrent] = React.useState<number>(0);
 
+  // selectedValue 的值 需要根据 radioValue 的状态来变化  现在的 Bug 是 选择了第一步到了第二步 再返回第一步重新选择时， 第二步没有变化
+  const [selectedValue, setSelectedValue] = React.useState<string>('');
+
+
   const getDescription = (step: string) => {
-    if (step === '步骤 1') {
-      return (
-        <>
-          <p style={{paddingTop:'5px'}}>{radioValue === 1? <Tag color="steppeYellow">定时</Tag> : <Tag color="auroraGreen">触发</Tag>}</p>
-        </>
-      );
+    switch (step) {
+      case '步骤 1': {
+        return (
+          <>
+            <p style={{ paddingTop: '5px' }}>
+              {radioValue === 1 ? <Tag color="steppeYellow">定时</Tag> : <Tag color="auroraGreen">触发</Tag>}
+            </p>
+          </>
+        );
+      }
+      case '步骤 2': {
+        return (
+          <>
+            <p style={{ paddingTop: '5px' }}>
+              {radioValue === 1 ? (
+                <Tag color="steppeYellow">{selectedValue}</Tag>
+              ) : (
+                <Tag color="auroraGreen">{selectedValue}</Tag>
+              )}
+            </p>
+          </>
+        );
+      }
+      default:
+        break;
     }
+
+    // if (step === '步骤 1') {
+    //   return (
+    //     <>
+    //       <p style={{ paddingTop: '5px' }}>
+    //         {radioValue === 1 ? <Tag color="steppeYellow">定时</Tag> : <Tag color="auroraGreen">触发</Tag>}
+    //       </p>
+    //     </>
+    //   );
+    // }
   };
   const handleRadioButtonChange = (e: RadioChangeEvent) => {
     console.log(e.target.value);
     setRadioValue(e.target.value);
+    setSelectedValue('');
+  };
+  const handleSelectChange = (value: string) => {
+    console.log(value);
+    setSelectedValue(value);
   };
   const steps = [
     {
@@ -32,12 +70,7 @@ const StepContent: React.FC<IStepContentProps> = (props) => {
       content: (
         <Form>
           <Form.Item name="radioButton">
-            <Radio.Group
-              onChange={handleRadioButtonChange}
-              defaultValue={1}
-              value={radioValue}
-              style={{ marginTop: '7%' }}
-            >
+            <Radio.Group onChange={handleRadioButtonChange} defaultValue={1} value={radioValue}>
               <Radio value={1}>
                 <div className={`${styles['definedContent']} ${radioValue === 1 ? styles['titleActive'] : ''}`}>
                   <TimeControllerOutlined style={{ fontSize: '25px', color: '#00bf8a' }} />
@@ -58,7 +91,30 @@ const StepContent: React.FC<IStepContentProps> = (props) => {
     {
       id: uniqueId(),
       title: '步骤 2',
-      content: 'Second-content',
+      content: (
+        <Form>
+          <Form.Item name="selectDropdown">
+            {radioValue === 1 && (
+              <div>
+                <span className={styles['select-label']}>请进一步选择：</span>
+                <Select style={{width:'150px'}} size="large" placeholder="请选择" value={selectedValue} onChange={handleSelectChange}>
+                  <Select.Option value="定时单次">定时单次</Select.Option>
+                  <Select.Option value="定时重复">定时重复</Select.Option>
+                </Select>
+              </div>
+            )}
+            {radioValue === 2 && (
+              <div>
+                <span className={styles['select-label']}>请进一步选择：</span>
+                <Select style={{width:'150px'}} size="large" placeholder="请选择" value={selectedValue} onChange={handleSelectChange}>
+                  <Select.Option value="完成触发">完成触发</Select.Option>
+                  <Select.Option value="未完成触发">未完成触发</Select.Option>
+                </Select>
+              </div>
+            )}
+          </Form.Item>
+        </Form>
+      ),
     },
     {
       id: uniqueId(),
