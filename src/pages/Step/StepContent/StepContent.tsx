@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Steps, Button, Form, Radio, RadioChangeEvent } from 'sensd';
+import { Steps, Button, Form, Radio, RadioChangeEvent ,Tag} from 'sensd';
 import styles from './index.less';
 import { uniqueId } from 'lodash';
 import { TemplateCustomOutlined, TimeControllerOutlined } from '@sensd/icons';
@@ -16,12 +16,13 @@ const StepContent: React.FC<IStepContentProps> = (props) => {
     if (step === '步骤 1') {
       return (
         <>
-          <h1>{radioValue}</h1>
+          <p style={{paddingTop:'5px'}}>{radioValue === 1? <Tag color="steppeYellow">定时</Tag> : <Tag color="auroraGreen">触发</Tag>}</p>
         </>
       );
     }
   };
   const handleRadioButtonChange = (e: RadioChangeEvent) => {
+    console.log(e.target.value);
     setRadioValue(e.target.value);
   };
   const steps = [
@@ -31,7 +32,12 @@ const StepContent: React.FC<IStepContentProps> = (props) => {
       content: (
         <Form>
           <Form.Item name="radioButton">
-            <Radio.Group onChange={handleRadioButtonChange} value={radioValue} style={{ marginTop: '7%' }}>
+            <Radio.Group
+              onChange={handleRadioButtonChange}
+              defaultValue={1}
+              value={radioValue}
+              style={{ marginTop: '7%' }}
+            >
               <Radio value={1}>
                 <div className={`${styles['definedContent']} ${radioValue === 1 ? styles['titleActive'] : ''}`}>
                   <TimeControllerOutlined style={{ fontSize: '25px', color: '#00bf8a' }} />
