@@ -1,25 +1,34 @@
 import * as React from 'react';
-import { Steps, Button, Form, Radio, RadioChangeEvent, Tag, Select, Input, InputNumber } from 'sensd';
+import { Steps, Button, Form, Radio, Tag, Select, Input } from 'sensd';
 import styles from './index.less';
 import { uniqueId } from 'lodash';
 import { TemplateCustomOutlined, TimeControllerOutlined } from '@sensd/icons';
-import { ChangeEvent } from 'react';
 
 const { Step } = Steps;
 
-interface IStepContentProps {}
-
-const StepContent: React.FC<IStepContentProps> = () => {
+const StepContent: React.FC = () => {
+  const inputNumberRef = React.useRef<any>();
   const [radioValue, setRadioValue] = React.useState<number>(1);
+  // 当前 step 的值
   const [current, setCurrent] = React.useState<number>(0);
-
-  // selectedValue 的值 需要根据 radioValue 的状态来变化  现在的 Bug 是 选择了第一步到了第二步 再返回第一步重新选择时， 第二步没有变化
   const [selectedValue, setSelectedValue] = React.useState<string>('');
   const [InputNumber, setInputNumber] = React.useState<string>('');
 
+  // 步骤条切换
+  const handleOnChange = (current: number) => {
+    setCurrent(current);
+  };
+
+  const next = () => {
+    setCurrent(current + 1);
+  };
+
+  const prev = () => {
+    setCurrent(current - 1);
+  };
   const getDescription = (step: string) => {
     switch (step) {
-      case '步骤 1': {
+      case 'Step1: Radio': {
         return (
           <>
             <p style={{ paddingTop: '5px' }}>
@@ -28,7 +37,7 @@ const StepContent: React.FC<IStepContentProps> = () => {
           </>
         );
       }
-      case '步骤 2': {
+      case 'Step2: Select': {
         return (
           <>
             <p style={{ paddingTop: '5px' }}>
@@ -42,7 +51,7 @@ const StepContent: React.FC<IStepContentProps> = () => {
         );
       }
       // 校验通过，才显示数字
-      case '步骤 3': {
+      case 'Step3: Input': {
         return (
           <>
             <p style={{ paddingTop: '5px' }}>
@@ -55,44 +64,47 @@ const StepContent: React.FC<IStepContentProps> = () => {
         break;
     }
   };
-  const handleRadioButtonChange = (e: RadioChangeEvent) => {
-    console.log(e.target.value);
-    setRadioValue(e.target.value);
+
+  const onRadioChange = ({ radioButton }) => {
+    setRadioValue(radioButton);
     setSelectedValue('');
   };
-  const handleSelectChange = (value: string) => {
-    console.log(value);
+
+  const handleSelectedChange = (value: string) => {
     setSelectedValue(value);
   };
 
+  React.useEffect(() => {
+    current === 2 && inputNumberRef.current!.focus();
+  });
+
   const validateInputNumber = (_, value) => {
-    console.log('value', value);
-    console.log('value', typeof value);
-    let reg = /^[1-9]+[0-9]*]*$/; //判断字符串是否为数字 ，判断正整数用/^[1-9]+[0-9]*]*$/
+    let reg = /^[1-9]+[0-9]*]*$/; //判断字符串是否为正整数
     if (value) {
       if (reg.test(value)) {
         if (value > 10) {
-          setInputNumber(value);
-          return Promise.resolve();
+          return Promise.resolve(value).then((values) => {
+            setInputNumber(values);
+          });
         } else {
           return Promise.reject(new Error('输入的数字必须大于 10'));
         }
       } else {
         return Promise.reject(new Error('输入必须为数字'));
       }
-    }else{
-        setInputNumber('');
-        return Promise.reject(new Error('请输入'));
+    } else {
+      setInputNumber('');
+      return Promise.reject(new Error('请输入'));
     }
   };
   const steps = [
     {
       id: uniqueId(),
-      title: '步骤 1',
+      title: 'Step1: Radio',
       content: (
-        <Form>
+        <Form name="radioButtonForm" initialValues={{ radioButton: radioValue }} onValuesChange={onRadioChange}>
           <Form.Item name="radioButton">
-            <Radio.Group onChange={handleRadioButtonChange} defaultValue={1} value={radioValue}>
+            <Radio.Group>
               <Radio value={1}>
                 <div className={`${styles['definedContent']} ${radioValue === 1 ? styles['titleActive'] : ''}`}>
                   <TimeControllerOutlined style={{ fontSize: '25px', color: '#00bf8a' }} />
@@ -112,39 +124,39 @@ const StepContent: React.FC<IStepContentProps> = () => {
     },
     {
       id: uniqueId(),
-      title: '步骤 2',
+      title: 'Step2: Select',
       content: (
-        <Form>
-          <Form.Item name="selectDropdown" rules={[{ required: true }, { message: '请选择一项' }]}>
+        <Form name="selectDropdownForm">
+          <Form.Item name="selectDropdown" rules={[{ required: true, message: '请选择一项' }]}>
             {radioValue === 1 && (
-              <div>
+              <>
                 <span className={styles['select-label']}>请进一步选择：</span>
                 <Select
                   style={{ width: '150px' }}
                   size="large"
                   placeholder="请选择"
+                  onChange={handleSelectedChange}
                   value={selectedValue}
-                  onChange={handleSelectChange}
                 >
                   <Select.Option value="定时单次">定时单次</Select.Option>
                   <Select.Option value="定时重复">定时重复</Select.Option>
                 </Select>
-              </div>
+              </>
             )}
             {radioValue === 2 && (
-              <div>
+              <>
                 <span className={styles['select-label']}>请进一步选择：</span>
                 <Select
                   style={{ width: '150px' }}
                   size="large"
                   placeholder="请选择"
+                  onChange={handleSelectedChange}
                   value={selectedValue}
-                  onChange={handleSelectChange}
                 >
                   <Select.Option value="完成触发">完成触发</Select.Option>
                   <Select.Option value="未完成触发">未完成触发</Select.Option>
                 </Select>
-              </div>
+              </>
             )}
           </Form.Item>
         </Form>
@@ -152,32 +164,16 @@ const StepContent: React.FC<IStepContentProps> = () => {
     },
     {
       id: uniqueId(),
-      title: '步骤 3',
+      title: 'Step3: Input',
       content: (
         <Form name="inputNumber" style={{ height: '50px' }}>
-          <Form.Item
-            name="inputNumber"
-            rules={[{ validator: validateInputNumber }]}
-          >
-            <Input size="large" placeholder="请输入数字" />
+          <Form.Item name="inputNumber" rules={[{ validator: validateInputNumber }]}>
+            <Input size="large" placeholder="请输入数字" ref={inputNumberRef} />
           </Form.Item>
         </Form>
       ),
     },
   ];
-
-  const handleOnChange = (current) => {
-    console.log('onChange:', current);
-    setCurrent(current);
-  };
-
-  const next = () => {
-    setCurrent(current + 1);
-  };
-
-  const prev = () => {
-    setCurrent(current - 1);
-  };
 
   return (
     <>
