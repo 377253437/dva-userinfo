@@ -6,9 +6,7 @@ import { TemplateCustomOutlined, TimeControllerOutlined } from '@sensd/icons';
 
 const { Step } = Steps;
 
-interface IStepContentProps {}
-
-const StepContent: React.FC<IStepContentProps> = () => {
+const StepContent: React.FC = () => {
   const [radioValue, setRadioValue] = React.useState<number>(1);
   const [current, setCurrent] = React.useState<number>(0);
   const [selectedValue, setSelectedValue] = React.useState<string>('');
