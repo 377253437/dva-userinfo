@@ -14,7 +14,7 @@
     "node-less": "^1.0.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "sensd": "^2.1.14"
+    "sensd": "^2.1.21"
   },
   "devDependencies": {
     "@types/node": "^18.0.6",

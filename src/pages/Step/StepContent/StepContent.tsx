@@ -76,10 +76,11 @@ const StepContent: React.FC = () => {
 
   React.useEffect(() => {
     current === 2 && inputNumberRef.current!.focus();
-  });
+  },[]);
 
   const validateInputNumber = (_, value) => {
-    let reg = /^[1-9]+[0-9]*]*$/; //判断字符串是否为正整数
+    let reg = /^[1-9]\d*|0$/; //判断字符串是否为正整数
+
     if (value) {
       if (reg.test(value)) {
         if (value > 10) {

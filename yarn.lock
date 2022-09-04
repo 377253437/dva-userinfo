@@ -1211,6 +1211,11 @@
   resolved "http://npm.fe.sensorsdata.cn/@sensd%2ficons-svg/-/icons-svg-1.4.17.tgz#98bc0c211d43ed145e09719c148d2f62866f6792"
   integrity sha512-uPkU0eymQiTfdozVH0Io7s+ps7itoGu1zsWGg4FsdSe9ZwP2wg6eBggtG9dvgp/k5OsXRZPSmvbIs+Y/fe4kUA==
 
+"@sensd/icons-svg@^1.4.20":
+  version "1.4.20"
+  resolved "http://npm.fe.sensorsdata.cn/@sensd%2ficons-svg/-/icons-svg-1.4.20.tgz#4707bc26672633f7b074fad3a0a135513e54732b"
+  integrity sha512-m8bVCeiIJL9YMmjB3Pj1mw0OJFpqh9HFzZR2OAR4c/gZti963sSqcS+4XbtoFnAoUcOVVxhtDFfMNkQ2IQjCug==
+
 "@sensd/icons@^1.0.1", "@sensd/icons@^1.3.17":
   version "1.3.17"
   resolved "http://npm.fe.sensorsdata.cn/@sensd%2ficons/-/icons-1.3.17.tgz#040224266338c5d719bf392850e7782aaaf03fd0"
@@ -1222,17 +1227,38 @@
     classnames "^2.2.6"
     rc-util "^5.9.4"
 
-"@sensd/rc-cascader@^0.1.7":
-  version "0.1.7"
-  resolved "http://npm.fe.sensorsdata.cn/@sensd%2frc-cascader/-/rc-cascader-0.1.7.tgz#0440d7c3234030957b11f261c031cba781d29616"
-  integrity sha512-OuBsfgy2RRnGUvTsIhbaMaY3kkrqM9gD/Jk1kEaAvam8M2enKyP6a7yB5wnhFJBQc8LedeFZ4B/ulgEO1lhToQ==
+"@sensd/icons@^1.3.20":
+  version "1.3.20"
+  resolved "http://npm.fe.sensorsdata.cn/@sensd%2ficons/-/icons-1.3.20.tgz#0f0f7d808a8a246195324831dd8acd44a29a8b6f"
+  integrity sha512-EzqhKb8RKNyqXrAUagB/KcEEcm96qO9ObGpih3K5iB2zpBHhcQrycrY033eRENfS3e6F0xLHIK6PWA8R1cJXtQ==
+  dependencies:
+    "@ant-design/colors" "^6.0.0"
+    "@babel/runtime" "^7.11.2"
+    "@sensd/icons-svg" "^1.4.20"
+    classnames "^2.2.6"
+    rc-util "^5.9.4"
+
+"@sensd/rc-cascader@^1.0.0":
+  version "1.0.0"
+  resolved "http://npm.fe.sensorsdata.cn/@sensd%2frc-cascader/-/rc-cascader-1.0.0.tgz#6538c02c5b5cc7ca1577362f5a32caebfe9ed9ea"
+  integrity sha512-Fs/s/qn8JwlHwucyeu1XoR8V4abKcsPTTM/1qPqr6SozeBjtLPcztby/PPaBJb20OtSPXmzl+FjdIiiAXIvdEQ==
   dependencies:
     "@babel/runtime" "^7.12.5"
+    "@sensd/icons" "^1.3.20"
     array-tree-filter "^2.1.0"
     classnames "^2.3.1"
     rc-select "~14.1.0"
     rc-tree "~5.6.3"
     rc-util "^5.6.1"
+
+"@sensd/rc-checkbox@^0.1.1":
+  version "0.1.1"
+  resolved "http://npm.fe.sensorsdata.cn/@sensd%2frc-checkbox/-/rc-checkbox-0.1.1.tgz#f678a84a18503f2c25cb7316b8b2e55e8a4dff1c"
+  integrity sha512-VwrJtiw6Zv4itDpRjpQlc2vKKY4w4AX7uXjzLZLKcjUoLzVS+7U2BN2yBCGZeR8cbsDwIQb8W8WKqPeimEfL6w==
+  dependencies:
+    "@babel/runtime" "^7.10.1"
+    "@sensd/icons" "^1.3.17"
+    classnames "^2.2.1"
 
 "@sensd/rc-drawer@^0.1.1":
   version "0.1.1"
@@ -1242,6 +1268,16 @@
     "@babel/runtime" "^7.10.1"
     "@sensd/rc-util" "^0.1.0"
     classnames "^2.2.6"
+
+"@sensd/rc-notification@0.0.2":
+  version "0.0.2"
+  resolved "http://npm.fe.sensorsdata.cn/@sensd%2frc-notification/-/rc-notification-0.0.2.tgz#393d398973bb6c9c0d2a7d024f5c765e9512bac4"
+  integrity sha512-56jnRHEXHb1qjc0c0HPyVe2SNCEwBwzCwvx7chV+MmPma18FVQEDeGkSthqDbPkCt6DZIXvWW94zYAyhT7U/vw==
+  dependencies:
+    "@babel/runtime" "^7.10.1"
+    classnames "2.x"
+    rc-motion "^2.2.0"
+    rc-util "^5.20.1"
 
 "@sensd/rc-select@^0.1.11", "@sensd/rc-select@^0.1.12", "@sensd/rc-select@^0.1.5":
   version "0.1.12"
@@ -1280,24 +1316,26 @@
     rc-resize-observer "^1.0.0"
     rc-util "^5.5.0"
 
-"@sensd/rc-tree-select@^0.1.4":
-  version "0.1.5"
-  resolved "http://npm.fe.sensorsdata.cn/@sensd%2frc-tree-select/-/rc-tree-select-0.1.5.tgz#eb5269fc6d6ea816fc1771bd953f15829a5b6c0d"
-  integrity sha512-sN2VNAIeeSavWvzAQyFDPUfLGZXYS3msybVjcsJFJg1OGvdiyKUMgUcOOypF+7EcRqGtxq5c43+Xuh0PtTIZ/g==
+"@sensd/rc-tree-select@^1.0.1":
+  version "1.0.1"
+  resolved "http://npm.fe.sensorsdata.cn/@sensd%2frc-tree-select/-/rc-tree-select-1.0.1.tgz#91651c5201b9bd4388a9c1e766d382813786a462"
+  integrity sha512-YPcDtlw+MU0akmxPJOuuqgkPv2GqmAzFdqd7zqEDYAFZkVJ80z1fiiWLc/69vfkZMd6lYGoEHwqt4mehUWFkMw==
   dependencies:
     "@babel/runtime" "^7.10.1"
     "@sensd/rc-select" "^0.1.11"
-    "@sensd/rc-tree" "^0.1.7"
+    "@sensd/rc-tree" "^1.0.1"
     classnames "2.x"
     rc-util "^5.16.1"
 
-"@sensd/rc-tree@^0.1.5", "@sensd/rc-tree@^0.1.7":
-  version "0.1.7"
-  resolved "http://npm.fe.sensorsdata.cn/@sensd%2frc-tree/-/rc-tree-0.1.7.tgz#fe49fce0723873577ff0549594305687b0643b2e"
-  integrity sha512-YCDZfxzsfs2o3gm3P+yFszuhh2a0LS/uhZo/LliBudobUTGE4FyycYnuUUQoMqj3aExozd2dCnS3AEL5vRSn+w==
+"@sensd/rc-tree@^1.0.1":
+  version "1.0.1"
+  resolved "http://npm.fe.sensorsdata.cn/@sensd%2frc-tree/-/rc-tree-1.0.1.tgz#26f4c21c007fb8f4cc35e640ed25b03f1137e29c"
+  integrity sha512-Uh5TgSiCokVZglQK08xV+9Zbi6sfoiOuKmGZZ2jAj1CmJhoWuYlbxotBkenGboRujQSRuPPatK1j3wNioW3dQA==
   dependencies:
     "@babel/runtime" "^7.10.1"
+    "@sensd/icons" "^1.3.20"
     classnames "2.x"
+    lodash "^4.17.21"
     rc-motion "^2.0.1"
     rc-util "^5.16.1"
     rc-virtual-list "^3.4.2"
@@ -10190,16 +10228,6 @@ rc-motion@^2.0.0, rc-motion@^2.0.1, rc-motion@^2.2.0, rc-motion@^2.3.0, rc-motio
     classnames "^2.2.1"
     rc-util "^5.21.0"
 
-rc-notification@4.5.7:
-  version "4.5.7"
-  resolved "http://npm.fe.sensorsdata.cn/rc-notification/-/rc-notification-4.5.7.tgz#265e6e6a0c1a0fac63d6abd4d832eb8ff31522f1"
-  integrity sha1-Jl5uagwaD6xj1qvU2DLrj/MVIvE=
-  dependencies:
-    "@babel/runtime" "^7.10.1"
-    classnames "2.x"
-    rc-motion "^2.2.0"
-    rc-util "^5.0.1"
-
 rc-overflow@1.2.8, rc-overflow@^1.0.0, rc-overflow@^1.2.0:
   version "1.2.8"
   resolved "http://npm.fe.sensorsdata.cn/rc-overflow/-/rc-overflow-1.2.8.tgz#40f140fabc244118543e627cdd1ef750d9481a88"
@@ -10396,7 +10424,7 @@ rc-util@^4.10.0, rc-util@^4.15.3:
     react-lifecycles-compat "^3.0.4"
     shallowequal "^1.1.0"
 
-rc-util@^5.0.1, rc-util@^5.0.6, rc-util@^5.12.0, rc-util@^5.14.0, rc-util@^5.15.0, rc-util@^5.16.1, rc-util@^5.17.0, rc-util@^5.18.1, rc-util@^5.19.2, rc-util@^5.2.0, rc-util@^5.2.1, rc-util@^5.21.0, rc-util@^5.3.0, rc-util@^5.4.0, rc-util@^5.5.0, rc-util@^5.6.1, rc-util@^5.7.0, rc-util@^5.8.0, rc-util@^5.9.4, rc-util@^5.9.8:
+rc-util@^5.0.1, rc-util@^5.0.6, rc-util@^5.12.0, rc-util@^5.14.0, rc-util@^5.15.0, rc-util@^5.16.1, rc-util@^5.17.0, rc-util@^5.18.1, rc-util@^5.19.2, rc-util@^5.2.0, rc-util@^5.2.1, rc-util@^5.20.1, rc-util@^5.21.0, rc-util@^5.3.0, rc-util@^5.4.0, rc-util@^5.5.0, rc-util@^5.6.1, rc-util@^5.7.0, rc-util@^5.8.0, rc-util@^5.9.4, rc-util@^5.9.8:
   version "5.23.0"
   resolved "http://npm.fe.sensorsdata.cn/rc-util/-/rc-util-5.23.0.tgz#a583b1ec3e1832a80eced7a700a494af0b590743"
   integrity sha1-pYOx7D4YMqgOztenAKSUrwtZB0M=
@@ -11263,22 +11291,24 @@ send@0.18.0:
     range-parser "~1.2.1"
     statuses "2.0.1"
 
-sensd@^2.1.14:
-  version "2.1.19"
-  resolved "http://npm.fe.sensorsdata.cn/sensd/-/sensd-2.1.19.tgz#075f0e914d0ebd32874918e3bb369b0488d7dc53"
-  integrity sha512-4y0aS6ITZlbBKzdBWbphgR64AU55Tw8LNMgqppny3GfylYNN91fWbFoddhdAMTU+tMUmmN47aXz2b+q3IWpWWQ==
+sensd@^2.1.21:
+  version "2.1.21"
+  resolved "http://npm.fe.sensorsdata.cn/sensd/-/sensd-2.1.21.tgz#8779f685ca2e356ea24f2e9b287987c3de3cb190"
+  integrity sha512-wXzzpQPaq/8deBYB9SsNgHSiYDX9QDaoz3feETeAYo9ZIBtNiNJFNIwfwvzQWgwVDLY6nYhjSt8i92QRluh2vw==
   dependencies:
     "@ant-design/colors" "^6.0.0"
     "@ant-design/react-slick" "~0.28.1"
     "@ctrl/tinycolor" "^3.4.0"
     "@sensd/compatible" "^0.1.10"
-    "@sensd/icons" "^1.3.17"
-    "@sensd/rc-cascader" "^0.1.7"
+    "@sensd/icons" "^1.3.20"
+    "@sensd/rc-cascader" "^1.0.0"
+    "@sensd/rc-checkbox" "^0.1.1"
     "@sensd/rc-drawer" "^0.1.1"
+    "@sensd/rc-notification" "0.0.2"
     "@sensd/rc-select" "^0.1.12"
     "@sensd/rc-tabs" "^0.1.1"
-    "@sensd/rc-tree" "^0.1.5"
-    "@sensd/rc-tree-select" "^0.1.4"
+    "@sensd/rc-tree" "^1.0.1"
+    "@sensd/rc-tree-select" "^1.0.1"
     "@sensd/result-component" "^1.0.0"
     array-tree-filter "^2.1.0"
     classnames "^2.2.6"
@@ -11296,7 +11326,6 @@ sensd@^2.1.14:
     rc-mentions "1.6.1"
     rc-menu "9.2.1"
     rc-motion "2.4.4"
-    rc-notification "4.5.7"
     rc-overflow "1.2.8"
     rc-pagination "3.1.15"
     rc-picker "2.5.19"
