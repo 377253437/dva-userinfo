@@ -12,6 +12,11 @@ const StepContent: React.FC = () => {
   const [selectedValue, setSelectedValue] = React.useState<string>('');
   const [InputNumber, setInputNumber] = React.useState<string>('');
 
+  const [inputNumberForm] = Form.useForm();
+  const [radioForm] = Form.useForm();
+  const [selectForm] = Form.useForm();
+  const inputNumberRef = React.useRef<any>();
+
   const getDescription = (step: string) => {
     switch (step) {
       case 'Step1: Radio': {
@@ -52,14 +57,18 @@ const StepContent: React.FC = () => {
   };
 
   const validateInputNumber = (_, value) => {
-    let reg = /^[1-9]\d*|0$/; //判断字符串是否为正整数
+    let reg = /^[0-9]\d*|0$/; //判断字符串是否为正整数
+    let regZero = /^0+/; //判断字符是否以 0 开头
     if (value) {
       if (reg.test(value)) {
-        if (value > 10) {
-          setInputNumber(value);
-          return Promise.resolve();
+        if (!regZero.test(value)) {
+          return value > 10
+            ? Promise.resolve(value).then((v) => {
+                setInputNumber(v);
+              })
+            : Promise.reject(new Error('输入的数字必须大于 10'));
         } else {
-          return Promise.reject(new Error('输入的数字必须大于 10'));
+          return Promise.reject(new Error('数字不能以 0 开头'));
         }
       } else {
         return Promise.reject(new Error('输入必须为数字'));
@@ -81,38 +90,32 @@ const StepContent: React.FC = () => {
     setCurrent(current - 1);
   };
 
-  const [inputNumberForm] = Form.useForm();
-
-  const [radioForm] = Form.useForm();
-
-  const [selectForm] = Form.useForm();
-
-  const inputNumberRef = React.useRef<any>()
-
   const handleSave = () => {
     radioForm.submit();
     inputNumberForm.submit();
     selectForm.submit();
-    selectForm.validateFields().then(v=>console.log(v)).catch(error=> message.warn('Step2 没有选择'))
+    selectForm
+      .validateFields()
+      .then((v) => console.log('validated', v))
+      .catch((_) => message.warn('Step2 没有选择'));
     console.log('radio', radioForm.getFieldsValue());
-    console.log('number', inputNumberForm.getFieldsValue());
     console.log('select', selectForm.getFieldsValue());
-
+    console.log('number', inputNumberForm.getFieldsValue());
   };
   const onRadioFinish = (values) => {
     console.log('radioFormFinished', values);
   };
   const onRadioChange = ({ radioButton }) => {
     setRadioValue(radioButton);
-    setSelectedValue('')
-    selectForm.setFieldsValue({selectDropdown:''})
+    setSelectedValue('');
+    selectForm.setFieldsValue({ selectDropdown: '' });
   };
-  const onSelectedChange = ({selectDropdown}) => {
-    setSelectedValue(selectDropdown)
-  }
+  const onSelectedChange = ({ selectDropdown }) => {
+    setSelectedValue(selectDropdown);
+  };
   React.useEffect(() => {
-    current === 2 && inputNumberRef.current!.focus()
-  })
+    current === 2 && inputNumberRef.current!.focus();
+  });
   const steps = [
     {
       id: uniqueId(),
@@ -149,17 +152,18 @@ const StepContent: React.FC = () => {
       id: uniqueId(),
       title: 'Step2: Select',
       content: (
-        <Form name="selectDropdownForm" form={selectForm} style={{ display: current === 1 ? 'block' : 'none' }} onValuesChange={onSelectedChange}>
+        <Form
+          name="selectDropdownForm"
+          form={selectForm}
+          style={{ display: current === 1 ? 'block' : 'none' }}
+          onValuesChange={onSelectedChange}
+        >
           <Form.Item>
             {radioValue === 1 && (
               <>
                 <span className={styles['select-label']}>请进一步选择：</span>
                 <Form.Item name="selectDropdown" rules={[{ required: true, message: '请选择一项' }]} noStyle>
-                  <Select
-                    style={{ width: '150px' }}
-                    size="large"
-                    placeholder="请选择"
-                  >
+                  <Select style={{ width: '150px' }} size="large" placeholder="请选择">
                     <Select.Option value="定时单次">定时单次</Select.Option>
                     <Select.Option value="定时重复">定时重复</Select.Option>
                   </Select>
@@ -170,11 +174,7 @@ const StepContent: React.FC = () => {
               <>
                 <span className={styles['select-label']}>请进一步选择：</span>
                 <Form.Item name="selectDropdown" rules={[{ required: true, message: '请选择一项' }]} noStyle>
-                  <Select
-                    style={{ width: '150px' }}
-                    size="large"
-                    placeholder="请选择"
-                  >
+                  <Select style={{ width: '150px' }} size="large" placeholder="请选择">
                     <Select.Option value="完成触发">完成触发</Select.Option>
                     <Select.Option value="未完成触发">未完成触发</Select.Option>
                   </Select>
@@ -194,8 +194,8 @@ const StepContent: React.FC = () => {
           style={{ height: '50px', display: current === 2 ? 'block' : 'none' }}
           form={inputNumberForm}
         >
-          <Form.Item name="inputNumber" rules={[{ validator: validateInputNumber }]} >
-            <Input size="large" placeholder="请输入数字" ref={inputNumberRef}/>
+          <Form.Item name="inputNumber" rules={[{ validator: validateInputNumber }]}>
+            <Input size="large" placeholder="请输入数字" ref={inputNumberRef} />
           </Form.Item>
         </Form>
       ),
@@ -232,7 +232,7 @@ const StepContent: React.FC = () => {
           </Button>
         )}
         {current === steps.length - 1 && (
-          <Button type="primary"  className={styles['save-button']} onClick={handleSave}>
+          <Button type="primary" className={styles['save-button']} onClick={handleSave}>
             保存
           </Button>
         )}
