@@ -62,11 +62,7 @@ const StepContent: React.FC = () => {
     if (value) {
       if (reg.test(value)) {
         if (!regZero.test(value)) {
-          return value > 10
-            ? Promise.resolve(value).then((v) => {
-                setInputNumber(v);
-              })
-            : Promise.reject(new Error('输入的数字必须大于 10'));
+          return value > 10 ? Promise.resolve(value).then((v) => { setInputNumber(v)}) : Promise.reject(new Error('输入的数字必须大于 10'));
         } else {
           return Promise.reject(new Error('数字不能以 0 开头'));
         }
@@ -94,10 +90,7 @@ const StepContent: React.FC = () => {
     radioForm.submit();
     inputNumberForm.submit();
     selectForm.submit();
-    selectForm
-      .validateFields()
-      .then((v) => console.log('validated', v))
-      .catch((_) => message.warn('Step2 没有选择'));
+    selectForm.validateFields().then((v) => console.log('validated', v)).catch((_) => message.warn('Step2 没有选择'));
     console.log('radio', radioForm.getFieldsValue());
     console.log('select', selectForm.getFieldsValue());
     console.log('number', inputNumberForm.getFieldsValue());
