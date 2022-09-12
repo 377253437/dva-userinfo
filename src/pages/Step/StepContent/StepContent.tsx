@@ -22,7 +22,7 @@ const StepContent: React.FC = () => {
       case 'Step1: Radio': {
         return (
           <>
-            <p style={{ paddingTop: '5px' }}>
+            <p style={{ paddingTop: "5px" }}>
               {radioValue === 1 ? <Tag color="steppeYellow">定时</Tag> : <Tag color="auroraGreen">触发</Tag>}
             </p>
           </>
@@ -74,6 +74,7 @@ const StepContent: React.FC = () => {
       return Promise.reject(new Error('请输入'));
     }
   };
+  
   const handleOnChange = (current) => {
     setCurrent(current);
   };
@@ -212,7 +213,9 @@ const StepContent: React.FC = () => {
           />
         ))}
       </Steps>
-      <div className={styles['steps-content']}>{steps.map((item) => item.content)}</div>
+      <div className={styles['steps-content']}>
+        {steps.map((item) => item.content)}
+        </div>
       <div className={styles['steps-action']}>
         {current > 0 && (
           <Button className={styles['step-button']} onClick={() => prev()}>

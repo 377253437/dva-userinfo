@@ -91,7 +91,7 @@ const MultiSelect: React.FC<ITestData> = ({ multiData }) => {
             newArr.push(obj);
           }
         } else {
-          if (item.cname.includes(val)) {
+          if (item.cname.toLowerCase().indexOf(val.toLowerCase()) !== -1) {
             newArr.push(item);
           }
         }
