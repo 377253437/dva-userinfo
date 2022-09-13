@@ -39,6 +39,7 @@ const SelectWrap: React.FC = () => {
   const onSelectFinish = (values: ICityValues): void => {
     const {cityValue ,provinceValue,regionValue} = values
     message.success(`提交成功：${cityValue}-${provinceValue}-${regionValue}`)
+    itemRef.current!.saveSelectedValues()
     console.log('finishedValues', values);
   };
 

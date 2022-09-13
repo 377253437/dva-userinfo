@@ -70,6 +70,29 @@ const SelectItem: React.FC<ISelectItemProps> = forwardRef(({ cityList }, itemRef
       .filter((item) => item.city === cities)
       .map((item) => item.region)[0];
 
+       // const cityArr = localStorage.getItem('cityArr') ? JSON.parse(localStorage.getItem('cityArr') || '0') : [];
+  //  ?.链式运算符报错  此处 ?. 会报错， 编译时 自动把 ? .分开了
+  // const res = data && data.filter((item) => item.province === provinces).map((item) => item.cities)?.[0];
+  // const res2 = (data && data.filter((item) => item.province === provinces).map((item) => item.cities)) ?? 'as'
+  // console.log(cityArr);
+  //   var a=null;
+  // console.log(a.toString()) //
+  // console.log(a?.toString())
+
+  // const regionArr = localStorage.getItem('regionArr') ? JSON.parse(localStorage.getItem('regionArr') || '0') : [];
+  //   cityArr &&
+  //   data
+  //     .filter((item) => item.province === selectedProvince)
+  //     .map((item) => item.cities)[0]
+  //     .filter((item) => item.city === selectedCity) &&
+  //   data
+  //     .filter((item) => item.province === selectedProvince)
+  //     .map((item) => item.cities)[0]
+  //     .filter((item) => item.city === selectedCity)
+  //     .map((item) => item.region)[0];
+
+  //  const regionArr = regionArr && regionArr.map(item => item.region)[0]
+  // console.log('regionArr', regionArr);
   //  const regionArr = regionArr && regionArr.map(item => item.region)[0]
   console.log('regionArr', regionArr);
 

@@ -22,7 +22,9 @@ const SelectItem: React.FC<ISelectItemProps> = forwardRef(({ cityList, selectedF
     return localStorage.getItem('provinces') ? JSON.parse(localStorage.getItem('provinces') || '0') : [];
   });
 
-  // const [selectedCity, setSelectedCity] = React.useState<string>('');
+  const [selectedCity, setSelectedCity] = React.useState<string>('');
+
+  const [selectedRegion, setSelectedRegion] = React.useState<string>('');
 
   const [selectedCityArr, setSelectedCityArr] = React.useState<any>(() => {
     return localStorage.getItem('cityArr') ? JSON.parse(localStorage.getItem('cityArr') || '0') : [];
@@ -36,6 +38,7 @@ const SelectItem: React.FC<ISelectItemProps> = forwardRef(({ cityList, selectedF
   useImperativeHandle(itemRef, () => {
     return {
       clearProvinceConfirm,
+      saveSelectedValues,
     };
   });
   const onProvinceChange = (value: string) => {
@@ -45,38 +48,53 @@ const SelectItem: React.FC<ISelectItemProps> = forwardRef(({ cityList, selectedF
     localStorage.removeItem('regions');
     localStorage.removeItem('regionArr');
     if (value) {
-      localStorage.setItem('provinces', JSON.stringify(value));
+      // localStorage.setItem('provinces', JSON.stringify(value));
       const cityArr = data.filter((item) => item.province === value).map((item) => item.cities)[0];
       // data &&
       // data.filter((item) => item.province === value).map((item) => item.cities) &&
-      localStorage.setItem('cityArr', JSON.stringify(cityArr));
+      // localStorage.setItem('cityArr', JSON.stringify(cityArr));
       setSelectedCityArr(cityArr);
     }
   };
   const onCityChange = (value: string) => {
     selectedForm.setFieldsValue({ regionValue: '' });
+    setSelectedCity(value);
     localStorage.removeItem('regions');
     if (value) {
-      localStorage.setItem('cities', JSON.stringify(value));
+      // localStorage.setItem('cities', JSON.stringify(value));
       const regionArr = data
         .filter((item) => item.province === selectedProvince)
         .map((item) => item.cities)[0]
         .filter((item) => item.city === value)
         .map((item) => item.region)[0];
-      // selectedCityArr &&
-      // data
-      //   .filter((item) => item.province === selectedProvince)
-      //   .map((item) => item.cities)[0]
-      //   .filter((item) => item.city === value) &&
-
-      localStorage.setItem('regionArr', JSON.stringify(regionArr));
+      // localStorage.setItem('regionArr', JSON.stringify(regionArr));
       setSelectedRegionArr(regionArr);
     }
   };
   const onRegionChange = (value: string) => {
-    if (value) {
-      localStorage.setItem('regions', JSON.stringify(value));
-    }
+    setSelectedRegion(value);
+    // if (value) {
+    //   localStorage.setItem('regions', JSON.stringify(value));
+    // }
+  };
+
+  const saveSelectedValues = () => {
+    localStorage.setItem('provinces', JSON.stringify(selectedProvince));
+    const cityArr = data.filter((item) => item.province === selectedProvince).map((item) => item.cities)[0];
+    // data &&
+    // data.filter((item) => item.province === value).map((item) => item.cities) &&
+    localStorage.setItem('cityArr', JSON.stringify(cityArr));
+    setSelectedCityArr(cityArr);
+
+    localStorage.setItem('cities', JSON.stringify(selectedCity));
+    const regionArr = data
+      .filter((item) => item.province === selectedProvince)
+      .map((item) => item.cities)[0]
+      .filter((item) => item.city === selectedCity)
+      .map((item) => item.region)[0];
+    localStorage.setItem('regionArr', JSON.stringify(regionArr));
+    setSelectedRegionArr(regionArr);
+    localStorage.setItem('regions', JSON.stringify(selectedRegion));
   };
 
   const clearProvinceConfirm = (): void => {
@@ -94,6 +112,7 @@ const SelectItem: React.FC<ISelectItemProps> = forwardRef(({ cityList, selectedF
   };
   const clearCityConfirm = (): void => {
     selectedForm.setFieldsValue({ cityValue: '', regionValue: '' });
+    setSelectedRegionArr([]);
     localStorage.removeItem('cities');
     localStorage.removeItem('regions');
     localStorage.removeItem('regionArr');
@@ -102,30 +121,15 @@ const SelectItem: React.FC<ISelectItemProps> = forwardRef(({ cityList, selectedF
     selectedForm.setFieldsValue({ regionValue: '' });
     localStorage.removeItem('regions');
   };
+  //?.，称为可选链接，只对读取/调用有用，对设置无效。从文档中：
 
-  // const cityArr = localStorage.getItem('cityArr') ? JSON.parse(localStorage.getItem('cityArr') || '0') : [];
-  //  ?.链式运算符报错  此处 ?. 会报错， 编译时 自动把 ? .分开了
-  // const res = data && data.filter((item) => item.province === provinces).map((item) => item.cities)?.[0];
-  // const res2 = (data && data.filter((item) => item.province === provinces).map((item) => item.cities)) ?? 'as'
-  // console.log(cityArr);
-  //   var a=null;
-  // console.log(a.toString()) //
-  // console.log(a?.toString())
+// 在其核心，可选链接允许我们编写代码，如果遇到null或undefined，TypeScript可以立即停止运行某些表达式。
 
-  // const regionArr = localStorage.getItem('regionArr') ? JSON.parse(localStorage.getItem('regionArr') || '0') : [];
-  //   cityArr &&
-  //   data
-  //     .filter((item) => item.province === selectedProvince)
-  //     .map((item) => item.cities)[0]
-  //     .filter((item) => item.city === selectedCity) &&
-  //   data
-  //     .filter((item) => item.province === selectedProvince)
-  //     .map((item) => item.cities)[0]
-  //     .filter((item) => item.city === selectedCity)
-  //     .map((item) => item.region)[0];
+// 所以你可以这样解释const foobarbaz = foo?.bar?.baz：
 
-  //  const regionArr = regionArr && regionArr.map(item => item.region)[0]
-  // console.log('regionArr', regionArr);
+  // if (data?.filter((item) => item.province === selectedProvince).map((item) => item.cities)?.[0]) {
+  //   console.log('aaaaaaaaaaa');
+  // }
 
   // 每次刷新后，调用一次，展示选中的数据
   React.useEffect(() => {
