@@ -3,7 +3,7 @@ import SelectItem from '../SelectItem';
 import SelectItemForm from '../SelectItemForm';
 import SelectItemFormTest from '../SelectItemForm/indexTest.jsx'
 import styles from './index.less';
-import { getData } from '../utils';
+import { getData } from '../../../utils/utils';
 import { Popconfirm, Button, Form, message } from 'sensd';
 
 export interface Cities {

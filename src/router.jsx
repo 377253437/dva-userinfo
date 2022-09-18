@@ -12,14 +12,16 @@ import { Router, Switch, Route } from 'dva/router';
 
 // import Step from './pages/Step'
 
-import ThreeSelect from './pages/ThreeSelect'
+// import ThreeSelect from './pages/ThreeSelect'
+
+import TabPage from './pages/TabPage'
 
 export default function RouterConfig({ history }) {
   // 路由配置
   return (
     <Router history={history}>
       <Switch>
-        <Route path="/" component={ThreeSelect}></Route>
+        <Route path="/" component={TabPage}></Route>
       </Switch>
     </Router>
   );
